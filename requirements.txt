@@ -1,0 +1,15 @@
+google-api-python-client 
+google-auth 
+google-auth-oauthlib 
+google-auth-httplib2 
+pandas 
+openpyxl
+bota 
+botasaurus 
+botasaurus-api 
+botasaurus-requests 
+botasaurus-driver 
+botasaurus-proxy-authentication 
+botasaurus-server 
+botasaurus-humancursor 
+playwright
