@@ -12,3 +12,4 @@ botasaurus-driver
 botasaurus-proxy-authentication 
 botasaurus-server 
 botasaurus-humancursor 
+stremlit 
