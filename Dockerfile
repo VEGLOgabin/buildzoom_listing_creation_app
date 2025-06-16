@@ -12,4 +12,4 @@ COPY . /app
 
 RUN python run.py install
 
-CMD ["python", "app.py"]
+CMD ["streamlit","run", "app.py"]
