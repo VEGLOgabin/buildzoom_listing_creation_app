@@ -478,20 +478,16 @@ st.set_page_config(page_title="BuildZoom Listing Bot", layout="centered")
 st.title("🤖 BuildZoom Listing Bot")
 st.markdown("""
 Welcome! This bot helps you automatically submit your business listing to **BuildZoom** using data from Google Drive. 
-
-✅ Data is fetched from an Excel file  
-✅ Screenshots and logos can be fetched from Drive too  
-✅ Human-like interactions powered by Botasaurus
 """)
 
 st.markdown("---")
 
 # ---- Load Image Preview ----
-st.subheader("📸 Google Drive Logo Images")
-st.markdown("---")
+# st.subheader("📸 Google Drive Logo Images")
+# st.markdown("---")
 
 # ---- Trigger Bot Section ----
-st.subheader("🚀 Run the BuildZoom Bot")
+st.subheader("Run the BuildZoom Bot")
 st.info("This will use the data from your Google Sheet to auto-fill the BuildZoom form.")
 
 run_bot = st.button("Start Bot")
