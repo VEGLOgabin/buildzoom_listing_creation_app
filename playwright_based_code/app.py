@@ -90,7 +90,7 @@ def buildzoom_signup():
     zip_code = extract_zip_code(address)
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=False)
         context = browser.new_context()
         page = context.new_page()
 
@@ -202,6 +202,7 @@ def buildzoom_signup():
         time.sleep(delay_time)
         page.fill("input[placeholder='Create a password']", password)
         print("✅ Fill in the password")
+        page.pause()
         time.sleep(delay_time)
         page.click("button.next-button")
         print("🎉 Done submitting the form!")
