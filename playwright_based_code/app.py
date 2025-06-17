@@ -67,6 +67,7 @@ def google_drive_operation():
 def buildzoom_signup():
     wait_time = 25
     delay_time = 5
+    timeout_up = 15000
 
     name = ""
     address = ""
@@ -79,6 +80,7 @@ def buildzoom_signup():
 
     data = google_drive_operation()
     if data:
+        st.success("✅ Google Sheet data pulled successfully!")
         name = data.get("Name", "")
         address = data.get("Address", "")
         phone_number = data.get("Phone", "")
@@ -94,118 +96,328 @@ def buildzoom_signup():
         context = browser.new_context()
         page = context.new_page()
 
-        page.goto("https://www.buildzoom.com/user/sign_in")
+        page.goto("https://www.buildzoom.com/user/sign_in", timeout=0)
         time.sleep(delay_time)
 
         try:
-            page.locator("div.email-password-form-action a").last.click()
+            page.locator("div.email-password-form-action a").last.click(timeout = timeout_up)
             print("✅ Clicked 'Sign up' link")
+            st.success("✅ Clicked 'Sign up' link!")
         except Exception as e:
             print(f"❌ Could not click 'Sign up' link: {e}")
+            st.error(f"✅ ❌ Could not click 'Sign up' link: {e}")
 
         time.sleep(delay_time)
 
         try:
-            page.locator("li.auth-screen-nav-item").last.click()
+            page.locator("li.auth-screen-nav-item").last.click(timeout = timeout_up)
             print("✅ Clicked 'Contractor' tab")
+            st.success("✅ Clicked 'Contractor' tab")
         except Exception as e:
             print(f"❌ Could not click 'Contractor' tab: {e}")
+            st.error(f"❌ Could not click 'Contractor' tab: {e}")
 
         time.sleep(delay_time)
 
         try:
             page.fill('input[placeholder="e.g. ABC Flooring"]', name)
             print("✅ Filled business name")
+            st.success("✅ Filled business name")
         except Exception as e:
             print(f"❌ Failed to fill business name: {e}")
+            st.error(f"❌ Failed to fill business name: {e}")
 
         time.sleep(delay_time)
 
         try:
-            page.click("a.claim-business-add-prompt-link")
+            page.click("a.claim-business-add-prompt-link", timeout=timeout_up)
             print("✅ Clicked '+ Add your business'")
+            st.success("✅ Clicked '+ Add your business'")
         except Exception as e:
             print(f"❌ Failed to click add business: {e}")
+            st.error(f"❌ Failed to click add business: {e}")
 
         time.sleep(delay_time)
 
-        page.fill('input[placeholder="name@email.com"]', e_mail)
-        page.fill('input[placeholder="Create a password"]', password)
-        print("✅ Entered email and password")
+        try:
+            page.fill('input[placeholder="name@email.com"]', e_mail, timeout=timeout_up)
+            st.success("✅ Entered email")
+            print("✅ Entered email")
+        except Exception as e:
+            st.error(f"❌ Failed to enter email: {e}")
+            print(f"❌ Failed to enter email: {e}")
 
         time.sleep(delay_time)
 
-        page.click("button.email-password-form-submit")
-        print("✅ Clicked submit")
+        try:
+            page.fill('input[placeholder="Create a password"]', password, timeout=timeout_up)
+            st.success("✅ Entered password")
+            print("✅ Entered password")
+        except Exception as e:
+            st.error(f"❌ Failed to enter password: {e}")
+            print(f"❌ Failed to enter password: {e}")
 
         time.sleep(delay_time)
 
-        page.select_option("select[ng-model='$ctrl.contractor.contractorTypeId']", value = "number:6")
-        print("✅ Selected 'Roofer'")
-
-        for label in page.locator("div.icon-button-label").all():
-            label.click()
-        print("✅ Selected all labels")
-
-        time.sleep(delay_time)
-        page.click("button.next-button")
-        print("✅ Clicked 'Next'")
-
-        time.sleep(delay_time)
-        page.click("button.next-button")
-
-        page.fill("input[placeholder='Street address']", address)
-        time.sleep(delay_time)
-        page.fill("input[placeholder='Zipcode']", zip_code)
-        time.sleep(delay_time)
-        page.select_option('select.travel-range-input', "number:150")
-        time.sleep(delay_time)
-        page.fill("input[placeholder='Mobile phone']", phone_number)
-
-        page.click("button.next-button")
+        try:
+            page.click("button.email-password-form-submit", timeout=timeout_up)
+            st.success("✅ Clicked submit")
+            print("✅ Clicked submit")
+        except Exception as e:
+            st.error(f"❌ Failed to click submit: {e}")
+            print(f"❌ Failed to click submit: {e}")
 
         time.sleep(delay_time)
 
-        page.select_option("select[ng-model='$ctrl.contractor.contractorTypeId']", "number:6")
+        try:
+            page.select_option("select[ng-model='$ctrl.contractor.contractorTypeId']", value="number:6", timeout=timeout_up)
+            st.success("✅ Selected 'Roofer'")
+            print("✅ Selected 'Roofer'")
+        except Exception as e:
+            st.error(f"❌ Failed to select 'Roofer': {e}")
+            print(f"❌ Failed to select 'Roofer': {e}")
+
+        try:
+            page.wait_for_selector("div.icon-button-label", timeout=timeout_up)
+            for label in page.locator("div.icon-button-label").all():
+                label.click(timeout=timeout_up)
+            st.success("✅ Selected all labels")
+            print("✅ Selected all labels")
+        except Exception as e:
+            st.error(f"❌ Failed to select labels: {e}")
+            print(f"❌ Failed to select labels: {e}")
+
         time.sleep(delay_time)
 
-        for box in page.locator("input").all():
-            box.click()
-        print("✅ Checked all checkboxes")
+        try:
+            page.click("button.next-button", timeout=timeout_up)
+            st.success("✅ Clicked 'Next'")
+            print("✅ Clicked 'Next'")
+        except Exception as e:
+            st.error(f"❌ Failed to click 'Next': {e}")
+            print(f"❌ Failed to click 'Next': {e}")
 
-        page.click("button.next-button")
-        print("✅ Next button clicked")
         time.sleep(delay_time)
 
-        page.fill('input[placeholder="https://..."]', website)
+        try:
+            page.click("button.next-button", timeout=timeout_up)
+            st.success("✅ Clicked 'Next'")
+            print("✅ Clicked 'Next'")
+        except Exception as e:
+            st.error(f"❌ Failed to click second 'Next': {e}")
+            print(f"❌ Failed to click second 'Next': {e}")
+
+        try:
+            page.fill("input[placeholder='Street address']", address, timeout=timeout_up)
+            st.success("✅ Entered address")
+            print("✅ Entered address")
+        except Exception as e:
+            st.error(f"❌ Failed to enter address: {e}")
+            print(f"❌ Failed to enter address: {e}")
+
+        time.sleep(delay_time)
+
+        try:
+            page.fill("input[placeholder='Zipcode']", zip_code, timeout=timeout_up)
+            st.success("✅ Entered Zipcode")
+            print("✅ Entered Zipcode")
+        except Exception as e:
+            st.error(f"❌ Failed to enter zipcode: {e}")
+            print(f"❌ Failed to enter zipcode: {e}")
+
+        time.sleep(delay_time)
+
+        try:
+            page.select_option('select.travel-range-input', "number:150", timeout=timeout_up)
+            st.success("✅ Selected travel range")
+            print("✅ Selected travel range")
+        except Exception as e:
+            st.error(f"❌ Failed to select travel range: {e}")
+            print(f"❌ Failed to select travel range: {e}")
+
+        time.sleep(delay_time)
+
+        try:
+            page.fill("input[placeholder='Mobile phone']", phone_number, timeout=timeout_up)
+            st.success("✅ Entered phone number")
+            print("✅ Entered phone number")
+        except Exception as e:
+            st.error(f"❌ Failed to enter phone number: {e}")
+            print(f"❌ Failed to enter phone number: {e}")
+
+        try:
+            page.click("button.next-button", timeout=timeout_up)
+            st.success("✅ Clicked 'Next' button")
+            print("✅ Clicked 'Next' button")
+        except Exception as e:
+            st.error(f"❌ Failed to click 'Next' button: {e}")
+            print(f"❌ Failed to click 'Next' button: {e}")
+
+        time.sleep(delay_time)
+
+        try:
+            page.select_option("select[ng-model='$ctrl.contractor.contractorTypeId']", "number:6", timeout=timeout_up)
+            st.success("✅ Selected contractor type again")
+            print("✅ Selected contractor type again")
+        except Exception as e:
+            st.error(f"❌ Failed to re-select contractor type: {e}")
+            print(f"❌ Failed to re-select contractor type: {e}")
+
+        time.sleep(delay_time)
+
+        try:
+            for box in page.locator("input").all():
+                box.click(timeout=timeout_up)
+            st.success("✅ Checked all news-related checkboxes")
+            print("✅ Checked all news-related checkboxes")
+        except Exception as e:
+            st.error(f"❌ Failed to check checkboxes: {e}")
+            print(f"❌ Failed to check checkboxes: {e}")
+
+        try:
+            page.click("button.next-button", timeout=timeout_up)
+            st.success("✅ Clicked next after checkboxes")
+            print("✅ Clicked next after checkboxes")
+        except Exception as e:
+            st.error(f"❌ Failed to click next after checkboxes: {e}")
+            print(f"❌ Failed to click next after checkboxes: {e}")
+
+        time.sleep(delay_time)
+
+        try:
+            page.fill('input[placeholder="https://..."]', website, timeout=timeout_up)
+            st.success("✅ Entered website")
+            print("✅ Entered website")
+        except Exception as e:
+            st.error(f"❌ Failed to enter website: {e}")
+            print(f"❌ Failed to enter website: {e}")
+
+
+
+        # page.fill('input[placeholder="name@email.com"]', e_mail, timeout=timeout_up)
+
+        # time.sleep(delay_time)
+
+
+        # page.fill('input[placeholder="Create a password"]', password, timeout=timeout_up)
+        # print("✅ Entered email and password")
+        # st.success("✅ Entered email and password")
+
+        # time.sleep(delay_time)
+
+        # page.click("button.email-password-form-submit", timeout=timeout_up)
+        # print("✅ Clicked submit")
+        # st.success("✅ Clicked submit")
+
+        # time.sleep(delay_time)
+
+        # page.select_option("select[ng-model='$ctrl.contractor.contractorTypeId']", value = "number:6", timeout=timeout_up)
+        # print("✅ Selected 'Roofer'")
+        # st.success("✅ Selected 'Roofer'")
+
+        # page.wait_for_selector("div.icon-button-label", timeout=timeout_up)
+        # for label in page.locator("div.icon-button-label").all():
+        #     label.click(timeout=timeout_up)
+        # print("✅ Selected all labels")
+        # st.success("✅ Selected all labels")
+
+        # time.sleep(delay_time)
+        # page.click("button.next-button", timeout=timeout_up)
+        # print("✅ Clicked 'Next'")
+        # st.success("✅ Clicked 'Next'")
+
+        # time.sleep(delay_time)
+        # page.click("button.next-button", timeout=timeout_up)
+        # st.success("✅ Clicked 'Next'")
+
+        # page.fill("input[placeholder='Street address']", address, timeout=timeout_up)
+        # st.success("✅ Entered address")
+
+        # time.sleep(delay_time)
+        # page.fill("input[placeholder='Zipcode']", zip_code, timeout=timeout_up)
+        # st.success("✅ Entered Zipecode")
+
+        # time.sleep(delay_time)
+        # page.select_option('select.travel-range-input', "number:150", timeout=timeout_up)
+        # st.success("✅ Travel range filled")
+
+        # time.sleep(delay_time)
+        # page.fill("input[placeholder='Mobile phone']", phone_number, timeout=timeout_up)
+        # st.success("✅ Entered phone number")
+
+        # page.click("button.next-button", timeout=timeout_up)
+        # st.success("✅ Clicked 'Next' button")
+
+        # time.sleep(delay_time)
+
+        # page.select_option("select[ng-model='$ctrl.contractor.contractorTypeId']", "number:6", timeout=timeout_up)
+        # st.success("✅ Choosed contractor type")
+        # time.sleep(delay_time)
+
+        # for box in page.locator("input").all():
+        #     box.click(timeout=timeout_up)
+        # print("✅ Checked all checkboxes related to the types of news you may want to receive")
+        # st.success("✅ Checked all checkboxes related to the types of news you may want to receive")
+
+        # page.click("button.next-button", timeout=timeout_up)
+
+        # print("✅ Next button clicked")
+        # st.success("✅ Next button clicked")
+
+        # time.sleep(delay_time)
+
+        # page.fill('input[placeholder="https://..."]', website, timeout=timeout_up)
+        # st.success("✅ Filled in the website!")
         time.sleep(delay_time)
         checkboxes = page.locator('input').all()
         if len(checkboxes) > 1:
-            checkboxes[1].click()
-            print("✅ Checked")
+            checkboxes[1].click(timeout=timeout_up)
+            print("✅ Checked the checkbox confirming you don't have a Facebook page to provide.")
+            st.success("✅ Checked the checkbox confirming you don't have a Facebook page to provide.")
 
-        page.click("button.next-button")
+        page.click("button.next-button", timeout=timeout_up)
         print("✅ Click Next button")
+        st.success("✅ Click Next button")
+
         time.sleep(delay_time)
-        page.fill('input[placeholder="To agree, type your name here"]', signature)
+
+        page.fill('input[placeholder="To agree, type your name here"]', signature, timeout=timeout_up)
         print("✅ Fill in Signature")
+        st.success("✅ Fill in Signature")
+
         time.sleep(delay_time)
-        page.click("button.next-button")
+
+        page.click("button.next-button", timeout=timeout_up)
+
         print("✅ Click Next button")
+        st.success("✅ Click Next button")
 
         checkboxes = page.locator('input').all()
         if checkboxes:
-            checkboxes[-1].click()
-            print("✅ Checked")
-        page.click("button.next-button")
-        print("✅ Click Next button")
-        time.sleep(delay_time)
-        page.fill("input[placeholder='Create a password']", password)
-        print("✅ Fill in the password")
-        page.pause()
-        time.sleep(delay_time)
-        page.click("button.next-button")
-        print("🎉 Done submitting the form!")
+            checkboxes[-1].click(timeout=timeout_up)
+            print("✅ Checked the checkbox confirming that you don't want to submit the license")
+            st.success("✅ Checked the checkbox confirming that you don't want to submit the license")
+        # Check if the password field is present
+        password_input = page.locator("input[placeholder='Create a password']")
+        if password_input.count() > 0 and password_input.first.is_visible():
+            password_input.fill(password, timeout=timeout_up)
+            print("✅ Filled in the password")
+            st.success("✅ Filled in the password")
+            time.sleep(delay_time)
+        else:
+            print("⚠️ Password field not found — skipping")
+            st.error("⚠️ Password field not found — skipping")
+
+        # Now check and click the final Next button if it's present
+        done_button = page.locator("button.next-button")
+        if done_button.count() > 0 and done_button.first.is_visible():
+            done_button.click(timeout=timeout_up)
+            print("🎉 Done submitting the form!")
+            st.success("🎉 Done submitting the form!")
+        else:
+            print("⚠️ Final submit button not found")
+            st.error("⚠️ Final submit button not found")
+
         time.sleep(15)
         browser.close()
 
