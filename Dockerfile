@@ -2,14 +2,22 @@ FROM chetan1111/botasaurus:latest
 
 ENV PYTHONUNBUFFERED=1
 
-COPY requirements.txt .
+# Install Python dependencies
+COPY requirements.txt /tmp/requirements.txt
+RUN python -m pip install --upgrade pip && \
+    python -m pip install -r /tmp/requirements.txt
 
-RUN python -m pip install -r requirements.txt
-
-RUN mkdir app
+# Create and switch to app directory
 WORKDIR /app
-COPY . /app
 
-RUN python run.py install
+# Copy all source files into container
+COPY . .
 
-CMD ["streamlit","run", "app.py"]
+# Ensure Botasaurus installs its components (you can skip this if already handled)
+RUN python run.py install || true
+
+# Expose default Streamlit port
+EXPOSE 8501
+
+# Run the Streamlit app
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
