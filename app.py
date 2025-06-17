@@ -67,7 +67,7 @@ def google_drive_operation():
 
 
 @browser(
-    headless = True, 
+    # headless = True, 
     lang=Lang.English,
     max_retry=5,
     reuse_driver=True,
@@ -77,8 +77,8 @@ def google_drive_operation():
     output=None,
 )
 def BuildZoomListing_Bot(driver: Driver, data):
-    wait_time = 15
-    delay_time = 2
+    wait_time = 25
+    delay_time = 5
     name = ""
     address = ""
     phone_number = ""
