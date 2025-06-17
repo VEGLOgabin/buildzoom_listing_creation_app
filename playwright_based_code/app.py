@@ -167,7 +167,7 @@ def buildzoom_signup():
             st.error(f"❌ Failed to click submit: {e}")
             print(f"❌ Failed to click submit: {e}")
 
-        time.sleep(delay_time)
+        time.sleep(wait_time)
 
         try:
             page.select_option("select[ng-model='$ctrl.contractor.contractorTypeId']", value="number:6", timeout=timeout_up)
