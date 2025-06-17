@@ -8,15 +8,15 @@ import pandas as pd
 import io
 from googleapiclient.http import MediaIoBaseDownload
 import os
+import streamlit as st
+import time
+from PIL import Image
+import os
 
 from playwright.sync_api import sync_playwright
 import time
 
-
-
 GOOGLE_DRIVE_FOLDER_KEY = "1vbN5nJmnVXLb2vyb143djusRkKfJWTna"
-
-
 
 def extract_zip_code(address: str) -> str:
     match = re.search(r'\b\d{5}\b', address)
@@ -64,11 +64,6 @@ def google_drive_operation():
 
 
 
-
-
-
-
-
 def buildzoom_signup():
     wait_time = 25
     delay_time = 5
@@ -95,7 +90,7 @@ def buildzoom_signup():
     zip_code = extract_zip_code(address)
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=True)
         context = browser.new_context()
         page = context.new_page()
 
@@ -179,6 +174,7 @@ def buildzoom_signup():
         print("✅ Checked all checkboxes")
 
         page.click("button.next-button")
+        print("✅ Next button clicked")
         time.sleep(delay_time)
 
         page.fill('input[placeholder="https://..."]', website)
@@ -186,24 +182,70 @@ def buildzoom_signup():
         checkboxes = page.locator('input').all()
         if len(checkboxes) > 1:
             checkboxes[1].click()
+            print("✅ Checked")
 
         page.click("button.next-button")
+        print("✅ Click Next button")
         time.sleep(delay_time)
         page.fill('input[placeholder="To agree, type your name here"]', signature)
+        print("✅ Fill in Signature")
+        time.sleep(delay_time)
         page.click("button.next-button")
+        print("✅ Click Next button")
 
         checkboxes = page.locator('input').all()
         if checkboxes:
             checkboxes[-1].click()
-
+            print("✅ Checked")
         page.click("button.next-button")
+        print("✅ Click Next button")
         time.sleep(delay_time)
         page.fill("input[placeholder='Create a password']", password)
+        print("✅ Fill in the password")
         time.sleep(delay_time)
         page.click("button.next-button")
-        time.sleep(delay_time)
         print("🎉 Done submitting the form!")
+        time.sleep(15)
         browser.close()
 
 # Usage
-buildzoom_signup()
+
+
+
+
+# BuildZoomListing_Bot()
+
+
+
+st.set_page_config(page_title="BuildZoom Listing Bot", layout="centered")
+
+# ---- Header Section ----
+st.title("🤖 BuildZoom Listing Bot")
+st.markdown("""
+Welcome! This bot helps you automatically submit your business listing to **BuildZoom** using data from Google Drive. 
+""")
+
+st.markdown("---")
+
+
+# ---- Trigger Bot Section ----
+st.subheader("Run the BuildZoom Bot")
+st.info("This will use the data from your Google Sheet to auto-fill the BuildZoom form.")
+
+run_bot = st.button("Start Bot")
+
+if run_bot:
+    with st.spinner("Initializing bot and browser..."):
+        try:
+            buildzoom_signup()
+            st.success("🎉 The form submission was completed successfully!")
+        except Exception as e:
+            st.error("❌ An error occurred while running the bot:")
+            st.exception(e)
+
+st.markdown("---")
+
+# ---- Credits ----
+st.caption("Built with ❤️ using Streamlit and Botasaurus")
+
+

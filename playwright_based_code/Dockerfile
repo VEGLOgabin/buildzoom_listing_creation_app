@@ -1,20 +1,28 @@
-# Start from the official Playwright image (includes all dependencies and browsers)
+# Base image with Playwright + Python + Browsers
 FROM mcr.microsoft.com/playwright/python:v1.44.0-jammy
 
-# Set the working directory
+# Avoid Python output buffering
+ENV PYTHONUNBUFFERED=1
+
+# Set working directory
 WORKDIR /app
 
-# Copy your Python requirements (adjust as needed)
+# Copy Python dependencies
 COPY requirements.txt .
 
-# Install Python dependencies
-RUN pip install -r requirements.txt
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of your application code
+# Copy application code
 COPY . .
 
-# If needed, give Playwright permission to install its dependencies (safe in this base image)
-RUN playwright install --with-deps
+# Install Playwright dependencies (optional here, but safe)
+#RUN playwright install --with-deps
+RUN playwright install
 
-# Set the command to run your script (change 'app.py' to your main file)
-CMD ["python", "app.py"]
+# Expose Streamlit default port
+EXPOSE 8501
+
+# Run the Streamlit app
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+
