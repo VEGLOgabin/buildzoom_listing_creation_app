@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
-# Install Playwright dependencies (optional here, but safe)
+# Install Playwright dependencies
 #RUN playwright install --with-deps
 RUN playwright install
 
